@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
+    "os"
 	"github.com/gin-gonic/gin"
 	"goapi/controller"
 	"goapi/db"
@@ -9,6 +11,14 @@ import (
 )
 
 func main() {
+
+	godotenv.Load("../.env")
+
+	if os.Getenv("env") == "dev" {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
 	server := gin.Default()
 
