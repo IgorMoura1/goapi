@@ -16,6 +16,9 @@ func ConnectDB() (*sql.DB, error) {
     password := os.Getenv("DB_PASSWORD")
     dbname := os.Getenv("DB_NAME")
 
+	fmt.Println("DB_HOST:", host)
+	fmt.Println("DB_PORT:", port)
+
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s " + "password=%s dbname=%s sslmode=disable", 
 	host, port, user, password, dbname)
 	db, err := sql.Open("postgres", psqlInfo)
@@ -28,7 +31,7 @@ func ConnectDB() (*sql.DB, error) {
 		panic(err)
 	}
 
-	fmt.Println("Successfully connected to the database!" + dbname)
+	fmt.Println("Successfully connected to the database!")
 
 	return db, nil
 }
