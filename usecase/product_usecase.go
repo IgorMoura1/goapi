@@ -30,3 +30,15 @@ func (pu *ProductUseCase) CreateProduct(product model.Product) (model.Product, e
 
 	return product, nil
 }
+
+func (pu *ProductUseCase) GetProductByID(id int) (model.Product, error) {
+    return pu.productRepository.GetProductByID(id)
+}
+
+func (pu *ProductUseCase) GetProductByName(name string) ([]model.Product, error) {
+    return pu.productRepository.GetProductByName(name)
+}
+
+func (pu *ProductUseCase) UpdateProduct(product model.Product) error {
+    return pu.productRepository.UpdateProduct(product)
+}

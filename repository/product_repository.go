@@ -70,3 +70,34 @@ func (pr *ProductRepository) CreateProduct(product model.Product) (int, error) {
 
 	return id, nil
 }
+
+func (pr *ProductRepository) GetProductByID(id int) (model.Product, error) {
+    var product model.Product
+    query := "SELECT id, product_name, price FROM product WHERE id = $1"
+    err := pr.connection.QueryRow(query, id).Scan(&product.ID, &product.Name, &product.Price)
+    return product, err
+}
+
+func (pr *ProductRepository) GetProductByName(name string) ([]model.Product, error) {
+    var products []model.Product
+    query := "SELECT id, product_name, price FROM product WHERE product_name ILIKE $1"
+    rows, err := pr.connection.Query(query, "%"+name+"%")
+    if err != nil {
+        return products, err
+    }
+    defer rows.Close()
+    for rows.Next() {
+        var product model.Product
+        if err := rows.Scan(&product.ID, &product.Name, &product.Price); err != nil {
+            return products, err
+        }
+        products = append(products, product)
+    }
+    return products, nil
+}
+
+func (pr *ProductRepository) UpdateProduct(product model.Product) error {
+    query := "UPDATE product SET product_name = $1, price = $2 WHERE id = $3"
+    _, err := pr.connection.Exec(query, product.Name, product.Price, product.ID)
+    return err
+}
